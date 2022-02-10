@@ -4,8 +4,8 @@ const Goal = require('../models/goalModel')
 // @desc    get goals
 // @route   GET /api/goals
 // @access  private
-const getGoals = asyncHandler(async (_, res) => {
-  const goals = await Goal.find()
+const getGoals = asyncHandler(async (req, res) => {
+  const goals = await Goal.find({ user: req.user.id })
   res.status(200).json(goals)
 })
 // @desc    set goal
