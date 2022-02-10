@@ -69,7 +69,8 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/me
 // @access  private
 const getMe = asyncHandler(async (req, res) => {
-  res.json({ message: 'user data' })
+  const { _id, name, email } = await User.findById(req.user.id)
+  res.status(200).json({ id: _id, name, email })
 })
 
 // generate jwt
