@@ -1,0 +1,5 @@
+module.exports = require('express')
+  .Router()
+  .post('/', (req, res) => res.json({ message: 'register user' }))
+  .post('/login', (req, res) => res.json({ message: 'login user' }))
+  .get('/me', (req, res) => res.json({ message: 'user data' }))
