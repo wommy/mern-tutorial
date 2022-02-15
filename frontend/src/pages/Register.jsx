@@ -7,27 +7,19 @@ import { register, reset } from '../features/auth/authSlice'
 import Spinner from '../components/Spinner'
 
 function Register() {
-  const [formData, setFormData] = useState({
+  const [{ name, email, password, password2 }, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     password2: '',
   })
-  const { name, email, password, password2 } = formData
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     state => state.auth,
   )
-
   useEffect(() => {
-    if (isError) {
-      toast.error(message)
-    }
-    if (isSuccess || user) {
-      navigate('/')
-    }
+    isError ? toast.error(message) : (isSuccess || user) && navigate('/')
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
@@ -39,16 +31,9 @@ function Register() {
   }
   const onSubmit = e => {
     e.preventDefault()
-    if (password !== password2) {
-      toast.error('passwords do not match')
-    } else {
-      const userData = {
-        name,
-        email,
-        password,
-      }
-      dispatch(register(userData))
-    }
+    password !== password2
+      ? toast.error('passwords do not match')
+      : dispatch(register({ name, email, password }))
   }
   if (isLoading) {
     return <Spinner />
@@ -66,8 +51,8 @@ function Register() {
         <form onSubmit={onSubmit}>
           <div className='form-group'>
             <input
-              type='text'
               className='form-control'
+              type='text'
               id='name'
               name='name'
               value={name}
@@ -77,8 +62,8 @@ function Register() {
           </div>
           <div className='form-group'>
             <input
-              type='email'
               className='form-control'
+              type='email'
               id='email'
               name='email'
               value={email}
@@ -88,8 +73,8 @@ function Register() {
           </div>
           <div className='form-group'>
             <input
-              type='password'
               className='form-control'
+              type='password'
               id='password'
               name='password'
               value={password}
@@ -99,8 +84,8 @@ function Register() {
           </div>
           <div className='form-group'>
             <input
-              type='password'
               className='form-control'
+              type='password'
               id='password2'
               name='password2'
               value={password2}

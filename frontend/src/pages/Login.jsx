@@ -7,25 +7,17 @@ import { login, reset } from '../features/auth/authSlice'
 import Spinner from '../components/Spinner'
 
 function Login() {
-  const [formData, setFormData] = useState({
+  const [{ email, password }, setFormData] = useState({
     email: '',
     password: '',
   })
-  const { email, password } = formData
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     state => state.auth,
   )
-
   useEffect(() => {
-    if (isError) {
-      toast.error(message)
-    }
-    if (isSuccess || user) {
-      navigate('/')
-    }
+    isError ? toast.error(message) : (isSuccess || user) && navigate('/')
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
@@ -37,11 +29,7 @@ function Login() {
   }
   const onSubmit = e => {
     e.preventDefault()
-    const userData = {
-      email,
-      password,
-    }
-    dispatch(login(userData))
+    dispatch(login({ email, password }))
   }
 
   if (isLoading) {
@@ -61,8 +49,8 @@ function Login() {
         <form onSubmit={onSubmit}>
           <div className='form-group'>
             <input
-              type='email'
               className='form-control'
+              type='email'
               id='email'
               name='email'
               value={email}
@@ -72,8 +60,8 @@ function Login() {
           </div>
           <div className='form-group'>
             <input
-              type='password'
               className='form-control'
+              type='password'
               id='password'
               name='password'
               value={password}
